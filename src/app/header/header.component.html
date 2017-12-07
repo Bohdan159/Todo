@@ -1,0 +1,18 @@
+<div class="todo">
+  <input *ngIf="hasItem" class="check-all-btn" type="button" value="V" (click)="checkAll()" (change)="checkValue">
+  <input class="todo-writer" type="text" placeholder="What needs to be done?" (keyup)="enterPress($event)" maxlength="140"
+         [(ngModel)]="todo">
+</div>
+<div *ngIf="hasItem">
+  <ul class="list-of-todos">
+    <li *ngFor="let todo of todos; let i=index" class="item-li">
+      <div *ngIf="!edit" class="item-div" id="{{i}}">
+        <input type="checkbox" class="item-check" name="{{i}}" checked="{{checkValue}}" > <!--[checked]="checkValue"-->
+        <label (dblclick)="editMode()" class="info-todo" >{{todo}}</label>
+        <input type="button" class="destroy" value="X" (click)="destroy(i)" name="{{i}}">
+      </div>
+      <input *ngIf="edit" type="text" class="edit" (blur)="defMode($event, i)" (keyup)="defMode($event)" [value]='todoEdit'
+             >
+    </li>
+  </ul>
+</div>

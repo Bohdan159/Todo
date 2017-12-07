@@ -1,0 +1,11 @@
+header {
+  width: 30%;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+footer{
+  width: 30%;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.5);
+}
