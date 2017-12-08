@@ -1,7 +1,7 @@
 <div class="footer">
-  <label>{{count}} items left</label>
-  <input type="button" class="btn" (click)="all()" value="All">
-  <input type="button" class="btn" (click)="active()" value="Active">
-  <input type="button" class="btn" (click)="complete()" value="Completed">
-  <input *ngIf="hasCompleted" type="button" class="btn" (click)="clear()" value="Clear completed">
+  <label class="count">{{count}} items left</label>
+  <input type="button" class="btn btn-all" (click)="all()" value="All">
+  <input type="button" class="btn btn-active" (click)="active()" value="Active">
+  <input type="button" class="btn btn-completed" (click)="completed()" value="Completed">
+  <input *ngIf="hasCompleted" type="button" class="btn btn-clear" (click)="clear()" value="Clear completed">
 </div>

@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FormForTodoComponent } from './form_for_todo/form-for-todo.component';
 import { FooterComponent } from './footer/footer.component';
+import { ListOfTodosComponent } from './list-of-todos/list-of-todos.component';
+import { DataService } from "./services/data.service";
 
 
 @NgModule({
@@ -13,13 +15,14 @@ import { FooterComponent } from './footer/footer.component';
     AppComponent,
     FormForTodoComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    ListOfTodosComponent
   ],
   imports: [
     BrowserModule,
     FormsModule
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

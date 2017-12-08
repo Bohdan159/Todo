@@ -1,0 +1,14 @@
+<div *ngIf="hasItem" class="wrap-list">
+  <input class="check-all-btn" type="button" value="V" (click)="checkAll()" (change)="checkValue">
+  <ul class="list-of-todos">
+    <li *ngFor="let todo of todos; let i=index" class="item-li">
+      <div *ngIf="!editArray[i]" class="item-div" id="{{i}}">
+        <input type="checkbox" class="item-check" name="{{i}}" checked="{{checkValue}}"> <!--[checked]="checkValue"-->
+        <label (dblclick)="editMode(i)" class="info-todo">{{todo}}</label>
+        <input type="button" class="destroy" value="X" (click)="destroy(i)" name="{{i}}">
+      </div>
+      <input *ngIf="editArray[i]" type="text" class="edit" (blur)="defMode($event, i)" (keyup)="defMode($event, i)"
+             autofocus id="{{i}}" value="{{todo}}">
+    </li>
+  </ul>
+</div>
