@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
-
-class Todo {
-  constructor(public todo: string, public completed: boolean, public id: number) {
-  }
-}
+import { DataToFooter } from '../services/data-to-footer';
+import { DataToList } from '../services/data-to-list';
 
 @Component({
   selector: 'todos',
@@ -15,53 +12,151 @@ export class ListOfTodosComponent implements OnInit {
   private hasItem = false;
   private edit = false;
   private editArray: boolean[] = [];
-  private todoChange: string = '';
-  private todoEdit = '';
+  private todoChange = '';
+  private hasCompleted = false;
+  private checkValue: string;
+  private todosCurrent: string[] = [];
   private todos: string[] = [];
-  public checkValue: string;
+  private completedTodos: string[] = [];
+  private activeTodos: string[] = [];
+  private countTodos = 0;
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService, private dataToFooter: DataToFooter, private dataToList: DataToList) {
   }
 
   ngOnInit() {
-    this.dataService.currentTodo.subscribe(todo => {
-      if (todo.trim() != '') {
-        this.todoChange = todo;
-        this.hasItem = true;
-        this.addTodo();
-        console.log(this.todoChange);
-      }
-    });
+    this.dataService.currentTodo
+      .subscribe(todo => {
+        if (todo.trim() != '') {
+          this.todoChange = todo;
+          this.hasItem = true;
+          this.addTodo();
+        }
+      });
+    // this.dataToList.btnModeCurrent
+    //   .subscribe(({allTodo: all, activeTodo: active, completedTodo: completed}) => {
+    //     if (all) {
+    //       this.todosCurrent = this.todos.slice();
+    //     }
+    //     if (active) {
+    //       this.todosCurrent = this.activeTodos.slice();
+    //       this.todosCurrent = this.todosCurrent.filter((value) => {
+    //         if (value != '') {
+    //           return value;
+    //         }
+    //       });
+    //     }
+    //     if (completed) {
+    //       this.todosCurrent = this.completedTodos.slice();
+    //     }
+    //   });
+  }
+
+  public btnMode(){
+    this.dataToList.btnModeCurrent
+      .subscribe(({allTodo: all, activeTodo: active, completedTodo: completed}) => {
+        if (all) {
+          this.todosCurrent = this.todos.slice();
+        }
+        if (active) {
+          this.todosCurrent = this.activeTodos.slice();
+          this.todosCurrent = this.todosCurrent.filter((value) => {
+            if (value != '') {
+              return value;
+            }
+          });
+        }
+        if (completed) {
+          this.todosCurrent = this.completedTodos.slice();
+        }
+      });
   }
 
   public addTodo() {
     this.todos.push(this.todoChange);
+    this.activeTodos = this.todos.slice();
     this.editArray.push(this.edit);
+    this.countTodos = this.activeTodos.length;
+    this.dataToFooter.changeCountTodo(this.countTodos, this.hasItem);
+    this.btnMode();
   }
 
-  checkAll() {
-    this.checkValue = this.checkValue == undefined ? 'checked' : undefined;
-    this.dataService.checkedAllItems(this.checkValue);
+  public checkAll() {
+    if (this.checkValue == undefined) {
+      this.checkValue = 'checked';
+      this.hasCompleted = true;
+      this.completedTodos = this.todos.slice();
+      this.activeTodos.length = 0;
+    } else {
+      this.checkValue = undefined;
+      this.hasCompleted = false;
+      this.completedTodos = [];
+      this.activeTodos = this.todos.slice();
+    }
+    this.countTodos = this.activeTodos.length;
+    this.dataToFooter.changeCountTodo(this.countTodos, this.hasItem);
   }
 
-  editMode(id) {
+  public editMode(id) {
     this.editArray[id] = true;
   }
 
 
-  defMode($event, id) {
+  public defMode($event, id) {
     if ($event.keyCode == '13' || $event.type == 'blur') {
       this.editArray[id] = false;
       this.todos[id] = $event.target.value;
     }
   }
 
-  destroy(id) {
+  public destroy(id) {
     this.todos.splice(id, 1);
-    // document.getElementsByClassName('.item-div').length;
     if (this.todos.length == 0) {
       this.hasItem = false;
     }
-    // console.log($event.target.name);  //свойство name dom-элемента
+    this.activeTodos = this.todos.slice();
+    this.countTodos = this.activeTodos.length;
+    this.dataToFooter.changeCountTodo(this.countTodos, this.hasItem);
+    this.btnMode();
+  }
+
+  public completedMode($event, id) {
+    let count = 0;
+    this.countTodos = 0;
+    if ($event.target.checked === true) {
+      this.hasCompleted = true;
+      this.completedTodos.push(this.todos[id]);
+      this.activeTodos.splice(this.todos.indexOf(this.todos[id]), 1, '');
+    } else {
+      this.completedTodos.splice(this.completedTodos.indexOf(this.todos[id]), 1);
+      this.activeTodos[id] = this.todos[id];
+      if (this.completedTodos.length === 0) {
+        this.hasCompleted = false;
+      }
+    }
+    this.activeTodos.filter((value) => {
+      if (value != '') {
+        count++;
+      }
+    });
+    this.countTodos = count;
+    this.dataToFooter.changeCountTodo(this.countTodos, this.hasItem);
+  }
+
+  public clear() {
+    console.log(this.todos);
+    this.completedTodos.forEach((value) => {
+      this.todos.splice(this.todos.indexOf(value), 1);
+    });
+    this.completedTodos = [];
+    this.btnMode();
+    this.hasCompleted = false;
+    if (this.todos.length == 0) {
+      this.hasItem = false;
+    } else {
+      this.hasItem = true;
+    }
+    this.dataToFooter.changeCountTodo(this.countTodos, this.hasItem);
+    this.checkValue = undefined;
   }
 }

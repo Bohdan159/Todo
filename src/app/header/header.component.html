@@ -1,5 +1,4 @@
 <div class="todo">
-  <!--<input *ngIf="hasItem" class="check-all-btn" type="button" value="V" (click)="checkAll()" (change)="checkValue">-->
   <input class="todo-writer" type="text" placeholder="What needs to be done?" (keyup)="enterPress($event)"
          maxlength="140"
          [(ngModel)]="todo">

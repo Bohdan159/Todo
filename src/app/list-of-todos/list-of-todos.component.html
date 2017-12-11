@@ -1,9 +1,9 @@
 <div *ngIf="hasItem" class="wrap-list">
   <input class="check-all-btn" type="button" value="V" (click)="checkAll()" (change)="checkValue">
   <ul class="list-of-todos">
-    <li *ngFor="let todo of todos; let i=index" class="item-li">
+    <li *ngFor="let todo of todosCurrent; let i=index" class="item-li">
       <div *ngIf="!editArray[i]" class="item-div" id="{{i}}">
-        <input type="checkbox" class="item-check" name="{{i}}" checked="{{checkValue}}"> <!--[checked]="checkValue"-->
+        <input type="checkbox" class="item-check" name="{{i}}" checked="{{checkValue}}" (change)="completedMode($event, i)"> <!--[checked]="checkValue"-->
         <label (dblclick)="editMode(i)" class="info-todo">{{todo}}</label>
         <input type="button" class="destroy" value="X" (click)="destroy(i)" name="{{i}}">
       </div>
@@ -11,4 +11,5 @@
              autofocus id="{{i}}" value="{{todo}}">
     </li>
   </ul>
+  <input *ngIf="hasCompleted" type="button" class="btn btn-clear" (click)="clear()" value="Clear completed"> <!---->
 </div>

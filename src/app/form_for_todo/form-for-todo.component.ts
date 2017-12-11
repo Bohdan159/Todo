@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './form-for-todo.component.html',
   styleUrls: ['./form-for-todo.component.css']
 })
-export class FormForTodoComponent {
-
-}
+export class FormForTodoComponent {}

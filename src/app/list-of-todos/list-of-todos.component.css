@@ -102,3 +102,24 @@
   box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
 }
+
+.btn{
+  margin-right: 20px;
+  border: none;
+  background: rgba(0, 0, 0, 0.003);
+  box-shadow: none;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+}
+
+.btn-clear{
+  position: absolute;
+  right: 0;
+  bottom: -33px;
+  z-index: 10;
+}
+
+.btn-clear:hover{
+  text-decoration: underline;
+}

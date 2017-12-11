@@ -1,9 +1,25 @@
 .footer{
-  width: 100%;
   position: relative;
-  /*background: */
+  padding: 16px 16px 16px 25px;
 }
 
 .count{
-
+  margin-right: 60px;
 }
+
+.btn{
+  margin-right: 20px;
+  border: none;
+  background: rgba(0, 0, 0, 0.003);
+  box-shadow: none;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border: 1px solid rgba(155,83,159, 0.5);
+}
+
+
+
