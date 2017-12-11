@@ -11,9 +11,7 @@ import { DataToList } from '../services/data-to-list';
 export class FooterComponent implements OnInit {
   private count = 0;
   private hasItem: boolean;
-  private allTodo = true;
-  private activeTodo = false;
-  private completedTodo = false;
+  private mode = 1;
 
   constructor(private dataToFooter: DataToFooter, private dataToList: DataToList) {
   }
@@ -23,27 +21,21 @@ export class FooterComponent implements OnInit {
       .subscribe(({count: countTodo, hasItem: hasItemFooter}) => {
         this.count = countTodo;
         this.hasItem = hasItemFooter;
-      });
+      }).unsubscribe();
   }
 
   all() {
-    this.allTodo = true;
-    this.activeTodo = false;
-    this.completedTodo = false;
-    this.dataToList.changeBtnMode(this.allTodo, this.activeTodo, this.completedTodo);
+    this.mode = 1;
+    this.dataToList.changeBtnMode(this.mode);
   }
 
   active() {
-    this.allTodo = false;
-    this.activeTodo = true;
-    this.completedTodo = false;
-    this.dataToList.changeBtnMode(this.allTodo, this.activeTodo, this.completedTodo);
+    this.mode = 2;
+    this.dataToList.changeBtnMode(this.mode);
   }
 
   completed() {
-    this.allTodo = false;
-    this.activeTodo = false;
-    this.completedTodo = true;
-    this.dataToList.changeBtnMode(this.allTodo, this.activeTodo, this.completedTodo);
+    this.mode = 3;
+    this.dataToList.changeBtnMode(this.mode);
   }
 }

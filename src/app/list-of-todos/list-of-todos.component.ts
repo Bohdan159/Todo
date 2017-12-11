@@ -32,44 +32,31 @@ export class ListOfTodosComponent implements OnInit {
           this.hasItem = true;
           this.addTodo();
         }
-      });
-    // this.dataToList.btnModeCurrent
-    //   .subscribe(({allTodo: all, activeTodo: active, completedTodo: completed}) => {
-    //     if (all) {
-    //       this.todosCurrent = this.todos.slice();
-    //     }
-    //     if (active) {
-    //       this.todosCurrent = this.activeTodos.slice();
-    //       this.todosCurrent = this.todosCurrent.filter((value) => {
-    //         if (value != '') {
-    //           return value;
-    //         }
-    //       });
-    //     }
-    //     if (completed) {
-    //       this.todosCurrent = this.completedTodos.slice();
-    //     }
-    //   });
+      }).unsubscribe();
   }
 
-  public btnMode(){
+  public btnMode() {
     this.dataToList.btnModeCurrent
-      .subscribe(({allTodo: all, activeTodo: active, completedTodo: completed}) => {
-        if (all) {
-          this.todosCurrent = this.todos.slice();
+      .subscribe((mode) => {
+        switch (mode) {
+          case 1: {
+            this.todosCurrent = this.todos.slice();
+            break;
+          }
+          case 2: {
+            this.todosCurrent = this.activeTodos.filter((value) => {
+              if (value != '') {
+                return value;
+              }
+            });
+            break;
+          }
+          case 3: {
+            this.todosCurrent = this.completedTodos.slice();
+            break;
+          }
         }
-        if (active) {
-          this.todosCurrent = this.activeTodos.slice();
-          this.todosCurrent = this.todosCurrent.filter((value) => {
-            if (value != '') {
-              return value;
-            }
-          });
-        }
-        if (completed) {
-          this.todosCurrent = this.completedTodos.slice();
-        }
-      });
+      }).unsubscribe();
   }
 
   public addTodo() {
@@ -82,7 +69,7 @@ export class ListOfTodosComponent implements OnInit {
   }
 
   public checkAll() {
-    if (this.checkValue == undefined) {
+    if (this.checkValue == null) {
       this.checkValue = 'checked';
       this.hasCompleted = true;
       this.completedTodos = this.todos.slice();
@@ -134,7 +121,7 @@ export class ListOfTodosComponent implements OnInit {
         this.hasCompleted = false;
       }
     }
-    this.activeTodos.filter((value) => {
+    this.activeTodos.forEach((value) => {
       if (value != '') {
         count++;
       }
@@ -151,11 +138,7 @@ export class ListOfTodosComponent implements OnInit {
     this.completedTodos = [];
     this.btnMode();
     this.hasCompleted = false;
-    if (this.todos.length == 0) {
-      this.hasItem = false;
-    } else {
-      this.hasItem = true;
-    }
+    this.hasItem = this.todos.length == 0 ? false : true;
     this.dataToFooter.changeCountTodo(this.countTodos, this.hasItem);
     this.checkValue = undefined;
   }
